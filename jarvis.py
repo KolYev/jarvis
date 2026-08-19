@@ -11,11 +11,14 @@ client = OpenAI(
     api_key=API_KEY
 )
 
+print("Вы: ", end="")
+message = str(input())
+
 responce = client.chat.completions.create(
     model="local-model",
     messages=[
         {"role": "system", "content": "Твоё имя - Джарвис"},
-        {"role": "user", "content": "Привет! Как тебя зовут?"}
+        {"role": "user", "content": message}
     ],
     temperature=0.7
 )
