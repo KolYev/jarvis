@@ -45,6 +45,8 @@ while True:
 
 
     max_tool_iterations = 3
+    final_text = None
+
     for _ in range(max_tool_iterations):
         response = client.chat.completions.create(
             model="local-model",
@@ -80,9 +82,18 @@ while True:
                     })
             continue
         else:
-            assistant_text = assistant_message.content
-            messages.append({"role": "assistant", "content": assistant_text})
-            print("Джарвис:", assistant_text)
+            final_text = assistant_message.content
+            messages.append({"role": "assistant", "content": final_text})
+            print("Джарвис:", final_text)
             break
     else:
         print("Джарвис: (достигнут лимит вызовов инструментов)")
+
+    if final_text:
+
+        response_audio = client.audio.speech.create(
+            model="tts-1",
+            voice="alloy",
+            input=final_text
+            )
+        response_audio.write_to_file("answer.mp3")
