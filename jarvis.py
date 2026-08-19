@@ -1,7 +1,8 @@
 from openai import OpenAI
 import os
 from dotenv import load_dotenv
-from ddgs import DDGS
+from websearch import websearch
+
 import json
 
 load_dotenv()
@@ -12,17 +13,6 @@ client = OpenAI(
     base_url="http://localhost:1234/v1",
     api_key=API_KEY
 )
-
-# поиск информации в DuckDuckGo
-def websearch(query, max_results=3):
-    with DDGS() as ddgs:
-        results = list(ddgs.text(query, max_results=max_results))
-    if not results:
-        return "Ничего не найдено."
-    snippets = []
-    for r in results:
-        snippets.append(f"Заголовок: {r['title']}\nСсылка: {r['href']}\nТекст: {r['body']}")
-    return "\n\n".join(snippets)
 
 # Описание инструмента для модели
 tools = [
