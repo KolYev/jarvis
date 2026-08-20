@@ -2,7 +2,8 @@ from openai import OpenAI
 import os
 from dotenv import load_dotenv
 from websearch import websearch
-from jarvis_voice import text_to_speech
+# from jarvis_voice import text_to_speech
+from jarvis_brain import FileReader
 
 import json
 
@@ -31,10 +32,30 @@ tools = [
                 "required": ["query"]
             }
         }
-    }
+    },
+    {
+            "type": "function",
+            "function": {
+                "name": "FileReader",
+                "description": "Читает содержимое файлов в указанной директории (по умолчанию текущая). Позволяет просмотреть свой собственный код или любые локальные файлы для самоанализа.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                    "path": {
+                        "type": "string",
+                        "description": "Путь к директории, которую нужно просканировать. По умолчанию '.'",
+                        "default": "."
+                    }
+                },
+                    "required": []
+                }
+            }
+        }
 ]
 
-system_prompt = "Твоё имя - Джарвис. Ты можешь использовать инструмент websearch для поиска информации в интернете, если это необходимо."
+system_prompt = "Твоё имя - Джарвис." \
+" Ты являешься машиной, которая может сама полностью знать и понимать как устроен твой код и твои возможности." \
+" На данный момент ты можешь использовать инструмент websearch для поиска информации в интернете, если это необходимо, а также инструмент FileReader, который позволит увидеть свой же собственный код."
 messages = [{"role": "system", "content": system_prompt}]
 
 while True:
@@ -75,6 +96,15 @@ while True:
                         "tool_call_id": tool_call.id,
                         "content": search_result
                     })
+                elif function_name == "FileReader":
+                    path = arguments.get("path", ".")
+                    print(f"[Инструмент] Чтение файлов")
+                    brain_result = FileReader(path)
+                    messages.append({
+                        "role": "tool",
+                        "tool_call_id": tool_call.id,
+                        "content": brain_result
+                    })
                 else:
                     messages.append({
                         "role": "tool",
@@ -90,5 +120,5 @@ while True:
     else:
         print("Джарвис: (достигнут лимит вызовов инструментов)")
 
-    if final_text:
-        text_to_speech(final_text)
+    # if final_text:
+    #     text_to_speech(final_text)
