@@ -2,4 +2,4 @@
 __pycache__/
 voices/
 venv/
-jarvis_voice.py
+result.wav
