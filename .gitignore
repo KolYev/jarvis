@@ -1,3 +1,5 @@
 .env
 __pycache__/
-voice/
+voices/
+venv/
+jarvis_voice.py
