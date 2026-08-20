@@ -2,6 +2,7 @@ from openai import OpenAI
 import os
 from dotenv import load_dotenv
 from websearch import websearch
+from jarvis_voice import text_to_speech
 
 import json
 
@@ -90,10 +91,4 @@ while True:
         print("Джарвис: (достигнут лимит вызовов инструментов)")
 
     if final_text:
-
-        response_audio = client.audio.speech.create(
-            model="tts-1",
-            voice="alloy",
-            input=final_text
-            )
-        response_audio.write_to_file("answer.mp3")
+        text_to_speech(final_text)
