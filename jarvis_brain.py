@@ -46,3 +46,13 @@ def EditFile(filename, old_text, new_text):
         return f"Файл '{filename}' обновлён: первое вхождение '{old_text}' заменено."
     except Exception as e:
         return f"Ошибка при редактировании файла: {e}"
+
+def CreateFolder(path):
+    """
+    Создаёт папки
+    """
+    try:
+        os.makedirs(path, exist_ok=True)
+        return f"Папка '{path}' успешно создана (или уже существовала)."
+    except Exception as e:
+        return f"Ошибка при создании папки: {e}"
