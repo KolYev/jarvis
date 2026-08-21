@@ -78,5 +78,56 @@ tools = [
                 "required": ["filename", "old_text", "new_text"]
             }
         }
+    },
+    {
+    "type": "function",
+    "function": {
+        "name": "CreateFolder",
+        "description": "Создаёт папку по указанному пути. Если промежуточные папки отсутствуют, они будут созданы автоматически.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "Путь к папке (например, 'data/results' или 'new_folder')"
+                    }
+                },
+                "required": ["path"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "DeleteFile",
+            "description": "Удаляет файл по указанному пути. Используй, когда нужно удалить ненужный файл.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {
+                        "type": "string",
+                        "description": "Путь к файлу"
+                    }
+                },
+                "required": ["path"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "DeleteFolder",
+            "description": "Удаляет папку и всё её содержимое без возможности восстановления. Используй с осторожностью.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {
+                        "type": "string",
+                        "description": "Путь к папке"
+                    }
+                },
+                "required": ["path"]
+            }
+        }
     }
 ]

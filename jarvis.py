@@ -3,7 +3,14 @@ import os
 from dotenv import load_dotenv
 from websearch import websearch
 # from jarvis_voice import text_to_speech
-from jarvis_brain import FileReader, CreateFile, EditFile
+from jarvis_brain import (
+    FileReader,
+    CreateFile,
+    EditFile,
+    CreateFolder,
+    DeleteFile,
+    DeleteFolder
+)
 from tools import tools
 import json
 
@@ -20,7 +27,10 @@ client = OpenAI(
 
 system_prompt = "Твоё имя - Джарвис." \
 " Ты являешься машиной, которая может сама полностью знать и понимать как устроен твой код и твои возможности." \
-" На данный момент ты можешь использовать инструмент websearch для поиска информации в интернете, если это необходимо, а также инструмент FileReader, который позволит увидеть свой же собственный код."
+" На данный момент ты можешь использовать инструмент websearch для поиска информации в интернете, если это необходимо, а также инструмент FileReader, который позволит увидеть свой же собственный код." \
+" Также ты можешь создавать и редактировать файлы с помощью инструментов CreateFile и EditFile." \
+" Ты можешь создавать папки (CreateFolder), удалять файлы (DeleteFile) и папки (DeleteFolder)." \
+" Будь осторожен с удалением – оно необратимо."
 messages = [{"role": "system", "content": system_prompt}]
 
 while True:
@@ -31,7 +41,7 @@ while True:
     messages.append({"role": "user", "content": user_input})
 
 
-    max_tool_iterations = 5
+    max_tool_iterations = 6
     final_text = None
 
     for _ in range(max_tool_iterations):
@@ -87,6 +97,35 @@ while True:
                     new_text = arguments.get("new_text")
                     print(f"[Инструмент] Редактирование файла: {filename}")
                     result = EditFile(filename, old_text, new_text)
+                    messages.append({
+                        "role": "tool",
+                        "tool_call_id": tool_call.id,
+                        "content": result
+                    })
+                elif function_name == "CreateFolder":
+                    path = arguments.get("path")
+                    print(f"[Инструмент] Создание папки: {path}")
+                    result = CreateFolder(path)
+                    messages.append({
+                        "role": "tool",
+                        "tool_call_id": tool_call.id,
+                        "content": result
+                    })
+
+                elif function_name == "DeleteFile":
+                    path = arguments.get("path")
+                    print(f"[Инструмент] Удаление файла: {path}")
+                    result = DeleteFile(path)
+                    messages.append({
+                        "role": "tool",
+                        "tool_call_id": tool_call.id,
+                        "content": result
+                    })
+
+                elif function_name == "DeleteFolder":
+                    path = arguments.get("path")
+                    print(f"[Инструмент] Удаление папки: {path}")
+                    result = DeleteFolder(path)
                     messages.append({
                         "role": "tool",
                         "tool_call_id": tool_call.id,
