@@ -3,8 +3,8 @@ import os
 from dotenv import load_dotenv
 from websearch import websearch
 # from jarvis_voice import text_to_speech
-from jarvis_brain import FileReader
-
+from jarvis_brain import FileReader, CreateFile, EditFile
+from tools import tools
 import json
 
 load_dotenv()
@@ -16,42 +16,7 @@ client = OpenAI(
     api_key=API_KEY
 )
 
-# Описание инструмента для модели
-tools = [
-    {
-        "type": "function",
-        "function": {
-            "name": "websearch",
-            "description": "Ищет информацию в интернете по заданному запросу. Используй, когда нужны актуальные данные или факты, которых нет в твоей памяти.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "query": {"type": "string", "description": "Поисковый запрос"},
-                    "max_results": {"type": "integer", "description": "Количество результатов", "default": 3}
-                },
-                "required": ["query"]
-            }
-        }
-    },
-    {
-            "type": "function",
-            "function": {
-                "name": "FileReader",
-                "description": "Читает содержимое файлов в указанной директории (по умолчанию текущая). Позволяет просмотреть свой собственный код или любые локальные файлы для самоанализа.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                    "path": {
-                        "type": "string",
-                        "description": "Путь к директории, которую нужно просканировать. По умолчанию '.'",
-                        "default": "."
-                    }
-                },
-                    "required": []
-                }
-            }
-        }
-]
+
 
 system_prompt = "Твоё имя - Джарвис." \
 " Ты являешься машиной, которая может сама полностью знать и понимать как устроен твой код и твои возможности." \
@@ -66,7 +31,7 @@ while True:
     messages.append({"role": "user", "content": user_input})
 
 
-    max_tool_iterations = 3
+    max_tool_iterations = 5
     final_text = None
 
     for _ in range(max_tool_iterations):
@@ -104,6 +69,28 @@ while True:
                         "role": "tool",
                         "tool_call_id": tool_call.id,
                         "content": brain_result
+                    })
+                elif function_name == "CreateFile":
+                    filename = arguments.get("filename")
+                    content = arguments.get("content")
+                    print(f"[Инструмент] Создание файла: {filename}")
+                    result = CreateFile(filename, content)
+                    messages.append({
+                        "role": "tool",
+                        "tool_call_id": tool_call.id,
+                        "content": result
+                    })
+
+                elif function_name == "EditFile":
+                    filename = arguments.get("filename")
+                    old_text = arguments.get("old_text")
+                    new_text = arguments.get("new_text")
+                    print(f"[Инструмент] Редактирование файла: {filename}")
+                    result = EditFile(filename, old_text, new_text)
+                    messages.append({
+                        "role": "tool",
+                        "tool_call_id": tool_call.id,
+                        "content": result
                     })
                 else:
                     messages.append({
