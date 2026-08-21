@@ -1,4 +1,5 @@
 import os
+import shutil
 
 def FileReader(path="."):
     """Чтение файлов в указанной директории"""
@@ -49,10 +50,37 @@ def EditFile(filename, old_text, new_text):
 
 def CreateFolder(path):
     """
-    Создаёт папки
+    Создаёт папку
     """
     try:
         os.makedirs(path, exist_ok=True)
         return f"Папка '{path}' успешно создана (или уже существовала)."
     except Exception as e:
         return f"Ошибка при создании папки: {e}"
+
+def DeleteFile(path):
+    """
+    Удаляет файл по указанному пути.
+    """
+    try:
+        if os.path.exists(path):
+            os.remove(path)
+            return f"Файл '{path}' успешно удалён."
+        else:
+            return f"Файл '{path}' не найден."
+    except Exception as e:
+        return f"Ошибка при удалении файла: {e}"
+
+
+def DeleteFolder(path):
+    """
+    Удаляет папку со всем её содержимым.
+    """
+    try:
+        if os.path.exists(path):
+            shutil.rmtree(path)
+            return f"Папка '{path}' успешно удалена вместе с содержимым."
+        else:
+            return f"Папка '{path}' не найдена."
+    except Exception as e:
+        return f"Ошибка при удалении папки: {e}"
