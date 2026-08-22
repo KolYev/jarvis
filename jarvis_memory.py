@@ -30,3 +30,9 @@ def update_profile(key, value):
     _save(data)
     return f"Запомнил: {key} = {value}"
 
+def remember_fact(fact):
+    """Сохраняет факт или вывод с меткой времени"""
+    data = _load()
+    data["facts"].append({"text": fact, "date": datetime.now().isoformat()})
+    _save(data)
+    return f"Запомнил: {fact}"
