@@ -36,3 +36,15 @@ def remember_fact(fact):
     data["facts"].append({"text": fact, "date": datetime.now().isoformat()})
     _save(data)
     return f"Запомнил: {fact}"
+
+def recall_facts(query=None, limit=10):
+    """Поиск сохранённых фактов по ключевым словам"""
+    data = _load()
+    facts = data.get("facts", [])
+    if query:
+        query_low = query.lower()
+        facts = [f for f in facts if query_low in f["text"].lower()]
+    facts = facts[-limit:]
+    if not facts:
+        return "Ничего не найдено в памяти"
+    return "\n".join(f"[{f['date'][:10]}] {f['text']}" for f in facts)
