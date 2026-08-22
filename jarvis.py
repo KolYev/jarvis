@@ -11,6 +11,7 @@ from jarvis_brain import (
     DeleteFile,
     DeleteFolder
 )
+from jarvis_memory import get_profile_text, update_profile, remember_fact, recall_facts
 from tools import tools
 import json
 
@@ -26,6 +27,7 @@ client = OpenAI(
 
 
 system_prompt = "Твоё имя - Джарвис." \
+f"\n\nВот что ты знаешь о пользователе:\n{get_profile_text()}"
 " Ты являешься машиной, которая может сама полностью знать и понимать как устроен твой код и твои возможности." \
 " На данный момент ты можешь использовать инструмент websearch для поиска информации в интернете, если это необходимо, а также инструмент FileReader, который позволит увидеть свой же собственный код." \
 " Также ты можешь создавать и редактировать файлы с помощью инструментов CreateFile и EditFile." \
