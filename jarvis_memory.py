@@ -14,3 +14,11 @@ def _save(data):
     with open(MEMORY_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
+def get_profile_text():
+    """Возвращает профиль пользователя как текст"""
+    data = _load()
+    profile = data.get("profile", {})
+    if not profile:
+        return "О пользователе пока ничего неизвестно"
+    lines = [f"- {k}: {v}" for k, v in profile.items()]
+    return "\n".join(lines)
