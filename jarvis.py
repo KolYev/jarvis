@@ -43,7 +43,7 @@ while True:
     messages.append({"role": "user", "content": user_input})
 
 
-    max_tool_iterations = 6
+    max_tool_iterations = 20
     final_text = None
 
     for _ in range(max_tool_iterations):
