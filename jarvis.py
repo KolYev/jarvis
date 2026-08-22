@@ -73,6 +73,18 @@ while True:
                         "tool_call_id": tool_call.id,
                         "content": search_result
                     })
+                elif function_name == "UpdateProfile":
+                    result = update_profile(arguments.get("key"), arguments.get("value"))
+                    messages.append({"role": "tool", "tool_call_id": tool_call.id, "content": result})
+
+                elif function_name == "RememberFact":
+                    result = remember_fact(arguments.get("fact"))
+                    messages.append({"role": "tool", "tool_call_id": tool_call.id, "content": result})
+
+                elif function_name == "RecallFacts":
+                    result = recall_facts(arguments.get("query"))
+                    messages.append({"role": "tool", "tool_call_id": tool_call.id, "content": result})
+
                 elif function_name == "FileReader":
                     path = arguments.get("path", ".")
                     print(f"[Инструмент] Чтение файлов")

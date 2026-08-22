@@ -15,6 +15,61 @@ tools = [
             }
         }
     },
+        {
+        "type": "function",
+        "function": {
+            "name": "UpdateProfile",
+            "description": "Обновляет информацию в профиле пользователя. Используй, когда нужно сохранить или изменить данные о пользователе (имя, предпочтения и тому подобное).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "Ключ (название поля), например 'имя', 'любимый_цвет'"
+                    },
+                    "value": {
+                        "type": "string",
+                        "description": "Новое значение для указанного ключа"
+                    }
+                },
+                "required": ["key", "value"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "RememberFact",
+            "description": "Сохраняет отдельный факт в долговременную память. Используй для запоминания важной информации, которую ты узнаёшь от пользователя",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "fact": {
+                        "type": "string",
+                        "description": "Текст факта, который нужно запомнить"
+                    }
+                },
+                "required": ["fact"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "RecallFacts",
+            "description": "Ищет в сохранённой памяти факты, соответствующие запросу. Используй, когда нужно вспомнить ранее запомненную информацию.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Поисковый запрос (ключевые слова) для поиска в памяти"
+                    }
+                },
+                "required": ["query"]
+            }
+        }
+    },
     {
             "type": "function",
             "function": {
@@ -129,5 +184,5 @@ tools = [
                 "required": ["path"]
             }
         }
-    }
+    },
 ]
