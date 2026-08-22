@@ -22,3 +22,11 @@ def get_profile_text():
         return "О пользователе пока ничего неизвестно"
     lines = [f"- {k}: {v}" for k, v in profile.items()]
     return "\n".join(lines)
+
+def update_profile(key, value):
+    "Обновляет или добавляет факт о пользователе"
+    data = _load()
+    data["profile"][key] = value
+    _save(data)
+    return f"Запомнил: {key} = {value}"
+
