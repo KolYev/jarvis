@@ -3,3 +3,4 @@ __pycache__/
 voices/
 venv/
 result.wav
+memory.json
